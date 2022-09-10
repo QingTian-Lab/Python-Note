@@ -5,7 +5,7 @@
 阅读代码并添加注释
 
 # Day 02
-重构 00portscan.py 脚本  
+重构 AAportscan.py 脚本  
 
 端口扫描的现有方案原理：
 - TCP 三次握手
