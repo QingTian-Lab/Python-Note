@@ -47,7 +47,8 @@ color_G = "\033[1;32m"
 color_Y = "\033[1;33m"
 color_B = "\033[1;34m"
 color_end = "\033[0m"
-
+def print_success(msg):
+    print(f"{color_G}[+]{color_end} {msg}")
 
 def scan(ip, port):
     # 异常处理头
