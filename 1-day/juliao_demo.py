@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-
-
+import socket
 import sys
 import threading
+import portscan_useroriented as pu
+import portscan_scanoriented as ps
+import portscan_threadoriented as pt
 """
 @ import 和 form xx import * 的区别
   主要是针对socket模块 
@@ -17,7 +19,7 @@ import threading
 from socket import *
 # 接收用户输入的参数，第一个为扫描的目标，可以为任意的host，不一定要为ip，更加弹性灵活；第二个为端口范围
 
-host = sys.argv[1]
+#host = sys.argv[1]
 """
 @ split
   1.语法：str.split(str="", num=string.count(str))
@@ -26,72 +28,39 @@ host = sys.argv[1]
   2. 返回值为分割后的字符串列表
   2.如用户输入 1000-3000，经处理后为：['1000', '3000']
 """
-port_range = sys.argv[2].split('-')
-
-# 定义起始端口和结束端口，接收来自 split 处理的结果
-start_port = int(port_range[0])
-end_port = int(port_range[1])
-# 调用 socket 下的 gethostbyname 来解析目标 IP
-target_ip = gethostbyname(host)
-# 创建列表 opened_port 保存目标开放的端口
-opened_ports = []
-
-
-def port_scanner(scan_target_ip, scan_port):
-    try:
-        sock = socket(AF_INET, SOCK_STREAM)
-        sock.settimeout(3)
-        result = sock.connect_ex((scan_target_ip, scan_port))
-        if result == 0:
-            opened_ports.append(scan_port)
-        sock.close()
-    except Exception as e:
-        print(e)
-
-
-def thread_handler():
-    thread_list = []
-    for port in range(start_port, end_port):
-        thread_object = threading.Thread(target=port_scanner,
-                                         args=(gethostbyname(sys.argv[1]),
-                                               int(port)))
-        thread_object.setDaemon(True)
-        thread_list.append(thread_object)
-
-    for thread_object in thread_list:
-        thread_object.start()
-
-    for thread_object in thread_list:
-        thread_object.join()
-
-    for open_port in opened_ports:
-        print(f"Target:{sys.argv[1]} -- IP: {gethostbyname(sys.argv[1])} -- Port:{open_port} ---> open!")
-    del thread_object
-    print("Scan Finished!")
+# port_range = sys.argv[2].split('-')
+#
+# # 定义起始端口和结束端口，接收来自 split 处理的结果
+# start_port = int(port_range[0])
+# end_port = int(port_range[1])
+# # 调用 socket 下的 gethostbyname 来解析目标 IP
+# target_ip = gethostbyname(host)
+# # 创建列表 opened_port 保存目标开放的端口
+# opened_ports = []
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print(f"Usage:{sys.argv[0]} [host] [start_port]-[end_port]")
-        print("Example:juliao_demo.py www.baidu.com 0-65535")
-        # 退出整个程序
-        exit(0)
-    print(
-        """
-          █████  ▄▄▄█████▓ ██▓███   ▒█████   ██▀███  ▄▄▄█████▓  ██████  ▄████▄   ▄▄▄       ███▄    █ 
-        ▒██▓  ██▒▓  ██▒ ▓▒▓██░  ██▒▒██▒  ██▒▓██ ▒ ██▒▓  ██▒ ▓▒▒██    ▒ ▒██▀ ▀█  ▒████▄     ██ ▀█   █ 
-        ▒██▒  ██░▒ ▓██░ ▒░▓██░ ██▓▒▒██░  ██▒▓██ ░▄█ ▒▒ ▓██░ ▒░░ ▓██▄   ▒▓█    ▄ ▒██  ▀█▄  ▓██  ▀█ ██▒
-        ░██  █▀ ░░ ▓██▓ ░ ▒██▄█▓▒ ▒▒██   ██░▒██▀▀█▄  ░ ▓██▓ ░   ▒   ██▒▒▓▓▄ ▄██▒░██▄▄▄▄██ ▓██▒  ▐▌██▒
-        ░▒███▒█▄   ▒██▒ ░ ▒██▒ ░  ░░ ████▓▒░░██▓ ▒██▒  ▒██▒ ░ ▒██████▒▒▒ ▓███▀ ░ ▓█   ▓██▒▒██░   ▓██░
-        ░░ ▒▒░ ▒   ▒ ░░   ▒▓▒░ ░  ░░ ▒░▒░▒░ ░ ▒▓ ░▒▓░  ▒ ░░   ▒ ▒▓▒ ▒ ░░ ░▒ ▒  ░ ▒▒   ▓▒█░░ ▒░   ▒ ▒ 
-         ░ ▒░  ░     ░    ░▒ ░       ░ ▒ ▒░   ░▒ ░ ▒░    ░    ░ ░▒  ░ ░  ░  ▒     ▒   ▒▒ ░░ ░░   ░ ▒░
-           ░   ░   ░      ░░       ░ ░ ░ ▒    ░░   ░   ░      ░  ░  ░  ░          ░   ▒      ░   ░ ░ 
-            ░                          ░ ░     ░                    ░  ░ ░            ░  ░         ░ 
-                                                                       ░            
-                                                                            QT-PortScan version 0.0.1                                                                             
-                                                                            @ QingTian Lab by Juliao
-        """
-    )
-    thread_handler()
+    # if len(sys.argv) != 3:
+    #     print(f"Usage:{sys.argv[0]} [host] [start_port]-[end_port]")
+    #     pu.tips()
+    #     exit(0)
+    # pu.banner()
+    if len(sys.argv) == 1:
+        pu.welcome()
+    elif sys.argv[1] == "-h" or sys.argv[1] == "--help":
+        pu.help_info()
+    elif ps.is_ip(sys.argv[1]) and ps.is_port(sys.argv[2]):
+        print("Start Scan")
+    else:
+        print("something")
+
+
+
+
+
+
+
+
+
 
 

@@ -163,6 +163,6 @@ if __name__ == "__main__":
             for p in arg_port:
                 scan(str(i), int(p))
     except KeyboardInterrupt as error:
-        print('\n{}[*] {} 手动结束了扫描'.format(color_Y,time.strftime('%H:%M:%S')))
+        print('\n{}[*] {} 手动结束了扫描'.format(color_Y, time.strftime('%H:%M:%S')))
     #print('共用时{}'.format(time.thread_time()))
 
