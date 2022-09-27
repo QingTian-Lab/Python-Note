@@ -34,7 +34,7 @@ FileObject = open("shelDWORDl.txt","wb+") # 关键第二个参数的b
 FileObject.write(b"SMB HEAD") # 8 Byte
 FileObject.write(struct.pack("Q",len(FileText))) # 8 Byte
 FileObject.write(FileText)
-
+FileObject.close()
 
 
 
