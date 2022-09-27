@@ -30,11 +30,10 @@ print(">i = ",BYTES)
 
 
 FileText = b"\xffSMB\x00\x00\x00"
-FileObject = open("shell.txt","wb+") # 关键第二个参数的b
+FileObject = open("shelDWORDl.txt","wb+") # 关键第二个参数的b
 FileObject.write(b"SMB HEAD") # 8 Byte
 FileObject.write(struct.pack("Q",len(FileText))) # 8 Byte
 FileObject.write(FileText)
-
 
 
 
